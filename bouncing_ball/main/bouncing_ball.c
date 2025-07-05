@@ -9,13 +9,13 @@
 #define TAG "BALL"
 
 // === CONFIG MACROS ===
-#define INIT_X 4
-#define INIT_Y 4
-#define INIT_VX 1
+#define INIT_X 1
+#define INIT_Y 1
+#define INIT_VX -1
 #define INIT_VY 1
 #define END_X 6
-#define END_Y 6
-#define FRAME_RATE 10  // frames per second
+#define END_Y 4
+#define FRAME_RATE 5  // frames per second
 
 // SPI & Display pins
 #define PIN_NUM_MOSI 23
@@ -29,7 +29,7 @@ int ball_y = INIT_Y;
 int vel_x = INIT_VX;
 int vel_y = INIT_VY;
 int frame_count = 0;
-
+volatile bool frame_ready = false;
 bool finish = false;
 
 
@@ -81,26 +81,24 @@ void draw_display() {
 
 // === BALL MOVEMENT LOGIC ===
 void update_ball() {
+    if (ball_x >= 7 || ball_x <= 1) vel_x *= -1; // bounce from wall or right
+    if (ball_y >= 7 || ball_y <= 0) vel_y *= -1; // top/bottom
     ball_x += vel_x;
     ball_y += vel_y;
 
-    if (ball_x >= 7 || ball_x <= 1) vel_x *= -1; // bounce from wall or right
-    if (ball_y >= 7 || ball_y <= 0) vel_y *= -1; // top/bottom
+    
 }
 
 // === TIMER ISR ===
 bool IRAM_ATTR timer_isr_callback(void *arg) {
     update_ball();
-    update_framebuffer();
-    draw_display();
+    frame_ready = true;  // 通知主程式該畫畫了
 
     frame_count++;
 
     if (ball_x == END_X && ball_y == END_Y) {
-        for (int i = 1; i <= 8; i++) max7219_send(i, 0x00); // clear
-        finish = true;
-        
         timer_pause(TIMER_GROUP_0, TIMER_0);
+        finish = true;
     }
 
     return pdFALSE;
@@ -158,8 +156,13 @@ void app_main(void) {
     update_framebuffer();
     draw_display();
     timer_setup();
-    while(!finish){
-        vTaskDelay(pdMS_TO_TICKS(1));
+    while (!finish) {
+        if (frame_ready) {
+            frame_ready = false;
+            update_framebuffer();
+            draw_display();  // ⛳現在在主 loop 安全使用
+        }
+        vTaskDelay(pdMS_TO_TICKS(1));  // 小睡一下
     }
     printf("Ball reached end. Frame count: %d\n", frame_count);
 }
