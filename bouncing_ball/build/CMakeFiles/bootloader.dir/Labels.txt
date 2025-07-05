@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+C:/D/ESP32LittlePJ/HW3/bouncing_ball/build/CMakeFiles/bootloader
+C:/D/ESP32LittlePJ/HW3/bouncing_ball/build/CMakeFiles/bootloader.rule
+C:/D/ESP32LittlePJ/HW3/bouncing_ball/build/CMakeFiles/bootloader-complete.rule
+C:/D/ESP32LittlePJ/HW3/bouncing_ball/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+C:/D/ESP32LittlePJ/HW3/bouncing_ball/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+C:/D/ESP32LittlePJ/HW3/bouncing_ball/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+C:/D/ESP32LittlePJ/HW3/bouncing_ball/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+C:/D/ESP32LittlePJ/HW3/bouncing_ball/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+C:/D/ESP32LittlePJ/HW3/bouncing_ball/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+C:/D/ESP32LittlePJ/HW3/bouncing_ball/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
